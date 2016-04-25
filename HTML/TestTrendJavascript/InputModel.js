@@ -18,8 +18,16 @@ var inputModel = function() {
             if (self.testNameRegex) {
                 self.testNameRegex = new RegExp(self.testNameRegex, "i");
             }
-            self.includeBuilds = self.parseIncludeExcludeBuilds(jQuery('#includeBuilds')[0].value);
-            self.excludeBuilds = self.parseIncludeExcludeBuilds(jQuery('#excludeBuilds')[0].value);
+            self.includeBuilds = jQuery('#includeBuilds')[0].value;
+            if (self.includeBuilds) {
+                self.includeBuilds = new RegExp(self.includeBuilds, 'i');
+            } else {
+                self.includeBuilds = new RegExp('.*', 'i');
+            }
+            self.excludeBuilds = jQuery('#excludeBuilds')[0].value;
+            if (self.excludeBuilds) {
+                self.excludeBuilds = new RegExp(self.excludeBuilds, 'i');
+            }
             self.showFailedBuilds = jQuery('#showFailedBuilds').prop('checked');
             self.relativeToBuild = jQuery('#relativeToBuild')[0].value;
             self.relativeToBuildInt = parseInt(self.relativeToBuild, 10);
@@ -62,11 +70,11 @@ var inputModel = function() {
         },
 
         filterIncludeBuilds: function(xLabel) {
-            return (!self.includeBuilds || self.includeBuilds.indexOf(xLabel) !== -1);
+            return (!self.includeBuilds || self.includeBuilds.test(xLabel));
         },
 
         filterExcludeBuilds: function(xLabel) {
-            return (!self.excludeBuilds || self.excludeBuilds.indexOf(xLabel) === -1);
+            return (!self.excludeBuilds || !self.excludeBuilds.test(xLabel));
         },
 
         filterShowFailedBuilds: function(success) {
@@ -79,47 +87,6 @@ var inputModel = function() {
                     self.filterExcludeBuilds(xLabel) && 
                     self.filterShowFailedBuilds(success)
                    );
-        },
-
-        parseIncludeExcludeBuilds: function(input) {
-            if (input == null || input === "") {
-                return null;
-            }
-            var inputEntries = input.split(",");
-            var output = []
-            for (var i = 0; i < inputEntries.length; i++) {
-                var rangeEntries = inputEntries[i].split("-")
-                if (rangeEntries.length === 1) {
-                    output.push(inputEntries[i]);
-                } else if (rangeEntries.length === 2) {
-                    if (rangeEntries[1] >= rangeEntries[0]) { 
-                        for (var j = rangeEntries[0]; j <= rangeEntries[1]; j++) {
-                            output.push(j.toString());
-                        }
-                    } else {
-                        for (var j = rangeEntries[0]; j >= rangeEntries[1]; j--) {
-                            output.push(j.toString());
-                        }
-                    }
-                }
-            }
-            return output;
-        },
-
-        sortInIncludeBuildsOrder: function(data) {
-            if (self.includeBuilds == null) {
-                return;
-            }
-
-            // sort in includeBuilds order
-            data.sort(function(a, b) {
-                var indexA = self.includeBuilds.indexOf(a.xLabel);
-                var indexB = self.includeBuilds.indexOf(b.xLabel);
-                return (indexA == indexB) ? 0 : (indexA > indexB) ? 1 : -1;
-            });
-            for (var j = 0; j < data.length; j++) {
-                data[j].x = j+1;
-            }
         },
 
         isRelativeToBuildDynamic: function() {
@@ -202,7 +169,6 @@ var inputModel = function() {
             }
 
             if (newData.length > 0 && hasAtLeastOneValue) {
-                self.sortInIncludeBuildsOrder(newData);
                 return { name : testSeries.name, color: testSeries.color, data: newData };
             } else {
                 return null;

@@ -108,10 +108,10 @@ function ConvertTo-EnhancedHTMLFragmentRickshawChart {
                     </tr>
                     <tr>
                         <td class="formLabel">
-                            <label for="includeBuild" title="List of build numbers to include. Can use , and - (e.g. 1,5-7).">Include builds:</label>
+                            <label for="includeBuilds" title="Use regex to include build numbers (e.g. 1|5|7).">Include builds regex:</label>
                         </td>
                         <td class="formInput">
-                            <input id="includeBuilds" type="text" placeholder="Include build numbers" />
+                            <input id="includeBuilds" type="text" placeholder="Include builds regex" />
                         </td>
                         <td class="formLabel">
                             <label for="minimalValue" title="Minimal time - tests below this value will be excluded.">Minimal value:</label>
@@ -135,10 +135,10 @@ function ConvertTo-EnhancedHTMLFragmentRickshawChart {
                     </tr>
                     <tr>
                         <td class="formLabel">
-                            <label for="excludeBuilds" title="List of build numbers to exclude. Can use , and - (e.g. 1,5-7).">Exclude builds:</label>
+                            <label for="excludeBuilds" title="Use regex to exclude build numbers (e.g. 1|5|7).">Exclude builds regex:</label>
                         </td>
                         <td class="formInput" colspan="7">
-                            <input id="excludeBuilds" type="text" placeholder="Exclude build numbers"/>
+                            <input id="excludeBuilds" type="text" placeholder="Exclude builds regex"/>
                         </td class="formInput">
                     </tr>
                     <tr>

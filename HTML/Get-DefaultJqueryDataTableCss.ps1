@@ -40,7 +40,7 @@ return @"
 body {
     color:#333333;
     font-family:Calibri,Tahoma;
-    font-size: 10pt;
+    font-size: 11pt;
 }
 h1 {
     text-align:center;
@@ -101,6 +101,13 @@ table.dataTable td {
     white-space: nowrap;
     overflow: hidden; 
     text-overflow: ellipsis;
+}
+
+table.dataTable th{
+    white-space: pre-wrap !important; /* CSS3 */
+    overflow: hidden;
+    height: auto !important;
+    vertical-align: bottom;
 }
 
 .ui-tooltip {

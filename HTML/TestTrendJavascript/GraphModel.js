@@ -109,11 +109,21 @@ var graphModel = function() {
 
             var xAxis = new Rickshaw.Graph.Axis.X( {
                 graph: self.graphObj,
-                tickFormat: function (x) { 
-                    return xLabelMap[x]; 
-                },
-                orientation:'bottom',
-				element: document.getElementById('x_axis')
+                orientation: 'bottom',
+                element: document.getElementById('x_axis'),
+                tickFormat: function (x) {
+	                var offset = 30;
+	                var charSizeInPx = 7;
+	                var height = 100;
+	                if (typeof xLabelMap[x] == 'string'){
+	                    height = offset + xLabelMap[x].length * charSizeInPx
+	                }
+	                d3.select(document.getElementById('x_axis')).selectAll('text')
+	                    .attr('style', 'text-anchor: start;');
+	                d3.select(document.getElementById('x_axis')).select('svg')
+	                    .attr('height', height);
+	                return xLabelMap[x];
+                }
             } );
 
             xAxis.render();

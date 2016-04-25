@@ -378,7 +378,7 @@ return @"
 }
 
 .x_ticks_d3 text {
-    transform: rotate(15deg) translate(0em, .5em);
+    transform: rotate(90deg) translate(1em, -0.9em);
 }
 
 .x_grid_d3 text{
