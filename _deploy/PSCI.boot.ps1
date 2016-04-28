@@ -24,14 +24,20 @@ SOFTWARE.
 
 $global:ErrorActionPreference = "Stop"
 
-$psciPath = [Environment]::GetEnvironmentVariable('PSCI_PATH', 'Machine')
+$psciPath = $env:PSCI_PATH
+if (!$psciPath) { 
+  $psciPath = [Environment]::GetEnvironmentVariable('PSCI_PATH', 'Machine')
+}
 if (!$psciPath) {
-  Write-Error "No PSCI_PATH environment variable. Please ensure PSCI is installed on $([system.environment]::MachineName)."
-  exit 1
+  $psciPath = Get-ChildItem -Path "$PSScriptRoot\.." -Exclude 'Boot' | Select -First 1 -ExpandProperty FullName
+  if (!$psciPath) { 
+      Write-Host -Object "No PSCI_PATH environment variable and PSCI not found at '$PSScriptRoot\..'. Please ensure PSCI is installed on $([system.environment]::MachineName)."
+      exit 1
+  } 
 }
 $psciPath = Join-Path -Path $psciPath -ChildPath 'PSCI.psd1'
 if (!(Test-Path -LiteralPath $psciPath )) {
-  Write-Error "Cannot find '$psciPath '. Please ensure PSCI is installed on $([system.environment]::MachineName)."
+  Write-Host "Cannot find '$psciPath'. Please ensure PSCI is installed on $([system.environment]::MachineName)."
   exit 1
 }
 
