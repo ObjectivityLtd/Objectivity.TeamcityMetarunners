@@ -25,7 +25,7 @@ try {
 
 $user = '%trendReport.tcServerDbConnection.userId%'
 $pass = '%trendReport.tcServerDbConnection.password%'
-$integratedSecurity = '%trendReport.integratedSecurity%' -ieq 'true'
+$integratedSecurity = '%trendReport.tcServerDbConnection.integratedSecurity%' -ieq 'true'
 if (!$integratedSecurity -and (!$user -or !$pass)) {
         throw "When integratedSecurity is false, userId and password must not be empty. Please modify this metarunner to enable integratedSecurity or include valid userId and password."
 }
