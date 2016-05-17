@@ -4,8 +4,8 @@
   <settings>
     <parameters>
       <param name="jmeter.aggregate.options" value="DetailedReport,AggregateReport,PublishTeamCityTests" spec="select label_1='Detailed Report (.jtl file must be in xml format)' data_1='DetailedReport' display='normal' label='Report generation options' data_3='AggregateReport' label_3='Aggregate Report' multiple='true' label_5='Publish Aggregate Report as Teamcity Tests' data_5='PublishTeamCityTests'" />
-      <param name="jmeter.aggregate.path" value="%env.TC_JMeter%" spec="text validationMode='not_empty' label='Path to JMeter' description='Path to root JMeter directory' display='normal'" />
-      <param name="jmeter.aggregate.javaPath" value="%env.TC_JDK7x86%\bin\java.exe" spec="text description='Path to java.exe that will be used by JMeter CMDRunner (leave empty for java.exe from path).' validationMode='any' label='Path to java' display='normal'" />
+      <param name="jmeter.aggregate.path" value="" spec="text validationMode='not_empty' label='Path to JMeter' description='Path to root JMeter directory' display='normal'" />
+      <param name="jmeter.aggregate.javaPath" value="" spec="text description='Path to java.exe that will be used by JMeter CMDRunner (leave empty for java.exe from path).' validationMode='any' label='Path to java' display='normal'" />
       <param name="jmeter.aggregate.jtl.path" value="" spec="text validationMode='not_empty' label='Path to JTL file' description='Input JTL file that will be parsed - relative to TeamCity working directory. Can be .xml or .csv, but Detailed report will not work for .csv' display='normal'" />
       <param name="jmeter.aggregate.perfmon.path" value="" spec="text validationMode='any' label='Path to PerfMon results (optional)' description='Input PerfMon file that will be parsed to generate PerfMon graph' display='normal'" />
       <param name="jmeter.aggregate.warning.thresholds" value="Average=3000,Median=3000,90% Line=3000,Max=30000,Error %=0" spec="text validationMode='any' label='Aggregate Report - warning thresholds' description='Thresholds that will be used to mark cells red in aggregate report table' display='normal'" />

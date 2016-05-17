@@ -3,7 +3,7 @@
   <description>Waits until JMeter process finishes and ensures it succeeded.</description>
   <settings>
     <parameters>
-      <param name="jmeter.rootPath" value="%env.TC_JMeter%" spec="text description='Path to root JMeter directory' label='Path to JMeter' display='normal'" />
+      <param name="jmeter.rootPath" value="" spec="text description='Path to root JMeter directory' label='Path to JMeter' display='normal'" />
       <param name="jmeter.jtlFile" value="" spec="text description='Path to the JMeter JTL file (output)' validationMode='not_empty' label='Path to JTL file' display='normal'" />
       <param name="jmeter.timeToWait" value="7200" spec="text description='Timeout (in seconds) for JMeter process. After this time the process will be killed and the build will fail.' validationMode='any' label='Time to wait' display='normal'" />
       <param name="jmeter.port" value="4445" spec="text description='The port where jmeter in non-GUI mode is listening on.' validationMode='regex' regexp='\d*' label='JMeter port' display='normal'" />

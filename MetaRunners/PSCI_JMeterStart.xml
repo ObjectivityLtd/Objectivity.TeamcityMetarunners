@@ -3,8 +3,8 @@
   <description>Start JMeter in foreground or background</description>
   <settings>
     <parameters>
-      <param name="jmeter.rootPath" value="%env.TC_JMeter%" spec="text description='Path to root JMeter directory' validationMode='not_empty' label='Path to JMeter' display='normal'" />
-      <param name="jmeter.javaPath" value="%env.TC_JDK7x86%\bin\java.exe" spec="text description='Path to java.exe that will be used by JMeter (leave empty for java.exe from path).' validationMode='any' label='Path to java' display='normal'" />
+      <param name="jmeter.rootPath" value="" spec="text description='Path to root JMeter directory' validationMode='not_empty' label='Path to JMeter' display='normal'" />
+      <param name="jmeter.javaPath" value="" spec="text description='Path to java.exe that will be used by JMeter (leave empty for java.exe from path).' validationMode='any' label='Path to java' display='normal'" />
       <param name="jmeter.jmxFile" value="" spec="text description='Path to the JMeter JMX file (input)' validationMode='not_empty' label='Path to JMX file' display='normal'" />
       <param name="jmeter.jtlFile" value="" spec="text description='Path to the JMeter JTL file (output)' validationMode='not_empty' label='Path to JTL file' display='normal'" />
       <param name="jmeter.properties" value="" spec="text description='Comma-delimited JMeter properties (e.g. host=localhost,threads=1)' validationMode='any' label='JMeter Properties' display='normal'" />
