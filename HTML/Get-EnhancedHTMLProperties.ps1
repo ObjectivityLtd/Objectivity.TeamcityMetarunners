@@ -71,7 +71,6 @@ function Get-EnhancedHTMLProperties {
         properties to play with. Process the list.
     #>
     foreach ($prop in $Properties) {
-        Write-Verbose "Processing property"
         $name = $null
         $value = $null
         $cell_css = ''
@@ -125,8 +124,8 @@ function Get-EnhancedHTMLProperties {
             if ($prop.ContainsKey('e')) { $value = $Object | ForEach $prop['e'] }
             if ($prop.ContainsKey('expression')) { $value = $tObject | ForEach $prop['expression'] }
 
-            if ($prop.ContainsKey('f')) { $value = $prop['f'] -f [decimal]$value }
-            if ($prop.ContainsKey('format')) { $value = $prop['format'] -f [decimal]$value }
+            if ($prop.ContainsKey('f')) { $value = $prop['f'] -f (ConvertTo-Decimal -Value $value) }
+            if ($prop.ContainsKey('format')) { $value = $prop['format'] -f (ConvertTo-Decimal -Value $value) }
 
 
             <#

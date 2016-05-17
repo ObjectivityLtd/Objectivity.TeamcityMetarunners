@@ -180,39 +180,45 @@ function New-JMeterAggregateReport {
                 @{n='Sampler';e={$_.sampler_label}; css={"alignLeft"}},
                 @{n='Count';e={$_.aggregate_report_count}},
                 @{n='Average';e={$_.average};
-                    css={if ($warningThresholdsValues.ContainsKey('Average') -and [decimal]($_.average) -gt $warningThresholdsValues['Average']) { 'warning' }}},
+                    css={if ($warningThresholdsValues.ContainsKey('Average') -and (ConvertTo-Decimal -Value $_.average) -gt $warningThresholdsValues['Average']) { 'warning' }}},
                 @{n='Median';e={$_.aggregate_report_median};
-                    css={if ($warningThresholdsValues.ContainsKey('Median') -and [decimal]($_.aggregate_report_median) -gt $warningThresholdsValues['Median']) { 'warning' }}},
+                    css={if ($warningThresholdsValues.ContainsKey('Median') -and (ConvertTo-Decimal -Value $_.aggregate_report_median) -gt $warningThresholdsValues['Median']) { 'warning' }}},
                 @{n='90% Line';e={$_.'aggregate_report_90%_line'};
-                    css={if ($warningThresholdsValues.ContainsKey('90% Line') -and [decimal]($_.'aggregate_report_90%_line') -gt $warningThresholdsValues['90% Line']) { 'warning' }}},
+                    css={if ($warningThresholdsValues.ContainsKey('90% Line') -and (ConvertTo-Decimal -Value $_.'aggregate_report_90%_line') -gt $warningThresholdsValues['90% Line']) { 'warning' }}},
                 @{n='Min';e={$_.aggregate_report_min};
-                    css={if ($warningThresholdsValues.ContainsKey('Min') -and [decimal]($_.aggregate_report_min) -gt $warningThresholdsValues['Min']) { 'warning' }}},
+                    css={if ($warningThresholdsValues.ContainsKey('Min') -and (ConvertTo-Decimal -Value $_.aggregate_report_min) -gt $warningThresholdsValues['Min']) { 'warning' }}},
                 @{n='Max';e={$_.aggregate_report_max};
-                    css={if ($warningThresholdsValues.ContainsKey('Max') -and [decimal]($_.aggregate_report_max) -gt $warningThresholdsValues['Max']) { 'warning' }}},
+                    css={if ($warningThresholdsValues.ContainsKey('Max') -and (ConvertTo-Decimal -Value $_.aggregate_report_max) -gt $warningThresholdsValues['Max']) { 'warning' }}},
                 @{n='Error %';e={$_.'aggregate_report_error%'};
                     f="{0:P2}"
-                    css={if ($warningThresholdsValues.ContainsKey('Error %') -and [decimal]($_.'aggregate_report_error%') -gt ($warningThresholdsValues['Error %'] / 100)) { 'warning' }}},
+                    css={if ($warningThresholdsValues.ContainsKey('Error %') -and (ConvertTo-Decimal -Value $_.'aggregate_report_error%') -gt ($warningThresholdsValues['Error %'] / 100)) { 'warning' }}},
                 @{n='Rate';e={$_.aggregate_report_rate}; 
                            f="{0:F2}"
-                           css={if ($warningThresholdsValues.ContainsKey('Rate') -and [decimal]($_.aggregate_report_rate) -gt $warningThresholdsValues['Rate']) { 'warning' }}},
+                           css={if ($warningThresholdsValues.ContainsKey('Rate') -and (ConvertTo-Decimal -Value $_.aggregate_report_rate) -gt $warningThresholdsValues['Rate']) { 'warning' }}},
                 @{n='Bandwidth';
                         e={$_.aggregate_report_bandwidth}; 
                         f="{0:F2}"
-                        css={if ($warningThresholdsValues.ContainsKey('Bandwidth') -and [decimal]($_.aggregate_report_bandwidth) -gt $warningThresholdsValues['Bandwidth']) { 'warning' }}},
+                        css={if ($warningThresholdsValues.ContainsKey('Bandwidth') -and (ConvertTo-Decimal -Value $_.aggregate_report_bandwidth) -gt $warningThresholdsValues['Bandwidth']) { 'warning' }}},
                 @{n='StdDev';
                         e={$_.aggregate_report_stddev}; 
                         f="{0:F2}"
-                        css={if ($warningThresholdsValues.ContainsKey('StdDev') -and [decimal]($_.aggregate_report_stddev) -gt $warningThresholdsValues['StdDev']) { 'warning' }}}
+                        css={if ($warningThresholdsValues.ContainsKey('StdDev') -and (ConvertTo-Decimal -Value $_.aggregate_report_stddev) -gt $warningThresholdsValues['StdDev']) { 'warning' }}}
                }
                      
 
     Write-Log -Info "Generating JMeter Aggregate Report from '$aggregateCsvOutputPath' and images available at '$OutputDir'" 
 
     $csv = Get-Content -Path $aggregateCsvOutputPath -ReadCount 0 | ConvertFrom-CSV
-    # Remove '%' from column 'aggregate_report_error%'
+    # Remove '%' from column 'aggregate_report_error%', and divide by 100
     if ($csv -and $csv.'aggregate_report_error%') { 
         foreach ($row in $csv) {
-            $row.'aggregate_report_error%' = $row.'aggregate_report_error%' -replace '%',''
+            if ($row.'aggregate_report_error%' -match '%') { 
+                $row.'aggregate_report_error%' = $row.'aggregate_report_error%' -replace '%',''
+                $decimal = ConvertTo-Decimal -Value $row.'aggregate_report_error%'
+                if ($decimal) {
+                    $row.'aggregate_report_error%' = $decimal / 100;
+                }
+            }
         }
     }
 
