@@ -8,6 +8,7 @@
       <param name="jmeter.timeToWait" value="7200" spec="text description='Timeout (in seconds) for JMeter process. After this time the process will be killed and the build will fail.' validationMode='any' label='Time to wait' display='normal'" />
       <param name="jmeter.port" value="4445" spec="text description='The port where jmeter in non-GUI mode is listening on.' validationMode='regex' regexp='\d*' label='JMeter port' display='normal'" />
       <param name="jmeter.shutdownmode" value="SendShutdownMessage" spec="select label_1='Kils JMeter process explicitly' data_1='KillProcess' label_2='Run the Shutdown client to stop a non-GUI instance gracefully' data_2='SendShutdownMessage' label_3='Run the Shutdown client to stop a non-GUI instance abruptly' data_3='SendStopTestNowMessage' display='normal' label='Shutdown mode'" />
+      <param name="jmeter.timeToWaitBeforeForceKill" value="60" spec="text description='Timeout (in seconds) for force-quitting JMeter process if `'Time to wait`' is exceeded. After this time the process will be killed immediately and the build will fail.' validationMode='any' label='Time to wait' display='normal'" />
       <param name="jmeter.enabled" value="true" spec="text description='Put false if this whole step should not run.' validationMode='any' label='Enabled' display='normal'" />
     </parameters>
     <build-runners>
@@ -28,6 +29,7 @@ try {
 -StdOutFile 'jmeter-stdout.txt' `
 -StdErrFile 'jmeter-stderr.txt' `
 -TimeoutInSeconds '%jmeter.timeToWait%' `
+-ForceKillTimeoutInSeconds '%jmeter.timeToWaitBeforeForceKill%' `
 -JMeterDir '%jmeter.rootPath%' `
 -ShutdownMode '%jmeter.shutdownmode%' `
 -JMeterNonGUIPort '%jmeter.port%' `
