@@ -61,6 +61,9 @@ function Wait-JMeter {
     .PARAMETER KillAfterTimeout
     If specified then the JMeter process is killed once $TimeoutInSeconds expires.
 
+    .PARAMETER ForceKillTimeoutInSeconds
+    Maximum time to wait before jmeter process is killed forcefully after waiting for timeout specified by TimeoutInSeconds.
+
     .OUTPUTS
     True if JMeter process is still running, false otherwise.
 
