@@ -22,8 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-$Public  = @(Get-ChildItem -Recurse -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue)
-$Private = @(Get-ChildItem -Recurse -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue)
+$Public  = @(Get-ChildItem -Recurse -Path $PSScriptRoot\Public\*.ps1 | Where-Object { $_ -notmatch '\.Tests.ps1' })
+$Private = @(Get-ChildItem -Recurse -Path $PSScriptRoot\Private\*.ps1 | Where-Object { $_ -notmatch '\.Tests.ps1' })
 
 foreach ($import in @($Public + $Private)) {
     try {

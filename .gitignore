@@ -2,3 +2,4 @@
 /deploy/deploy.log.txt
 /Objectivity.TeamcityMetarunners/TestTrend/New-TeamcityTrendReport.Tests.ps1
 /Objectivity.TeamcityMetarunners/baseModules/
+/build/test.xml
