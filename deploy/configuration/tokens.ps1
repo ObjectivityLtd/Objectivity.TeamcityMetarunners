@@ -25,8 +25,8 @@ SOFTWARE.
 Environment Default {
     Tokens Psci @{
         BlueGreenEnvVariableName = 'ObjectivityTeamcityMetarunners_PATH'
-        DestPathBlue = 'c:\ObjectivityTeamcityMetarunners\Blue'
-        DestPathGreen = 'c:\ObjectivityTeamcityMetarunners\Green'
+        DestPathBlue = 'c:\Objectivity.TeamcityMetarunners\Blue'
+        DestPathGreen = 'c:\Objectivity.TeamcityMetarunners\Green'
         DestPathBoot = 'c:\PSCI\Boot' # must be 'c:\PSCI' for backward compatibility
         PsciPackage = ''
     }

@@ -51,7 +51,7 @@ SOFTWARE.
 # we additionally accept different years
 $licenseTexts = @($licenseText, ($licenseText -replace '2015', '2016'), ($licenseText -replace '2015', '2017'))
 
-$customSources = Get-ChildItem -Path "$PSScriptRoot\..\ObjectivityTeamcityMetarunners" -File -Filter "*.ps*1" -Recurse | 
+$customSources = Get-ChildItem -Path "$PSScriptRoot\..\Objectivity.TeamcityMetarunners" -File -Filter "*.ps*1" -Recurse | 
                  Select-Object -ExpandProperty FullName |
                  Where-Object { $_ -inotmatch '(baseModules)' }
 

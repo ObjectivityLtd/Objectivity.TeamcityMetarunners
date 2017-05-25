@@ -31,13 +31,13 @@ if (!$modulePath) {
 if (!$modulePath) {
   $modulePath = Get-ChildItem -Path "$PSScriptRoot\.." -Exclude 'Boot' | Select -First 1 -ExpandProperty FullName
   if (!$modulePath) { 
-      Write-Host -Object "No ObjectivityTeamcityMetaRunners_PATH environment variable and module was not found at '$PSScriptRoot\..'. Please ensure ObjectivityTeamcityMetarunners is installed on $([system.environment]::MachineName)."
+      Write-Host -Object "No ObjectivityTeamcityMetaRunners_PATH environment variable and module was not found at '$PSScriptRoot\..'. Please ensure Objectivity.TeamcityMetarunners is installed on $([system.environment]::MachineName)."
       exit 1
   } 
 }
-$modulePath = Join-Path -Path $modulePath -ChildPath 'ObjectivityTeamcityMetarunners.psd1'
+$modulePath = Join-Path -Path $modulePath -ChildPath 'Objectivity.TeamcityMetarunners.psd1'
 if (!(Test-Path -LiteralPath $modulePath )) {
-  Write-Host "Cannot find '$modulePath'. Please ensure ObjectivityTeamcityMetarunners is installed on $([system.environment]::MachineName)."
+  Write-Host "Cannot find '$modulePath'. Please ensure Objectivity.TeamcityMetarunners is installed on $([system.environment]::MachineName)."
   exit 1
 }
 

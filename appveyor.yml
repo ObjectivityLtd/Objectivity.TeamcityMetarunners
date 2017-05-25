@@ -26,7 +26,7 @@ build_script:
 test: off
   
 artifacts:
-  - path: ObjectivityTeamcityMetarunners
+  - path: Objectivity.TeamcityMetarunners
  
 deploy:
   - provider: GitHub
@@ -45,7 +45,7 @@ deploy:
 #      appveyor_repo_tag: true
 
 after_deploy:
-  - ps: Publish-Module -Path (Join-Path -Path $env:APPVEYOR_BUILD_FOLDER -ChildPath "ObjectivityTeamcityMetarunners") -NuGetApiKey $env:PowershellGalleryApiKey -Verbose -Force
+  - ps: Publish-Module -Path (Join-Path -Path $env:APPVEYOR_BUILD_FOLDER -ChildPath "Objectivity.TeamcityMetarunners") -NuGetApiKey $env:PowershellGalleryApiKey -Verbose -Force
     on:
       branch: master
       appveyor_repo_tag: true
