@@ -26,15 +26,17 @@ Import-Module -Name "$PSScriptRoot\..\..\Objectivity.TeamcityMetarunners.psd1" -
 
 Describe "Invoke-RemotePowershellMetaRunner" {
     InModuleScope Objectivity.TeamcityMetarunners {
-
-        Mock Write-Log { 
-            if ($Critical) {
-                throw $Message
-            }
-        }
-        
+       
         $testFilePath = "Invoke-RemotePowershellMetaRunnerTests.temp.ps1"
         $testFileRemotePath = "c:\test\Invoke-RemotePowershellMetaRunnerTests.temp.ps1"
+
+        if ($Env:WinRmUser) {
+            $cred = ConvertTo-PSCredential -User $Env:WinRmUser -Password $Env:WinRmPassword
+            $connectionParams = New-ConnectionParameters -Nodes 'localhost' -Credential $cred
+        }
+        else {
+            $connectionParams = New-ConnectionParameters -Nodes 'localhost'
+        }
 
         try { 
             $testExpectedResult = 'TEST'
@@ -55,28 +57,26 @@ Describe "Invoke-RemotePowershellMetaRunner" {
 
             Context "when run locally with no user specified" {
 
-                $connParams = New-ConnectionParameters
-
                 It "should invoke script locally for ScriptFile" {
-                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile $testFilePath -ConnectionParams $connParams
+                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile $testFilePath -ConnectionParams $connectionParams
 
                    $result | Should Be $testExpectedResult
                 }
 
                 It "should invoke script locally for ScriptFile with ScriptFileIsRemotePath" {
-                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile $testFileRemotePath -ConnectionParams $connParams -ScriptFileIsRemotePath
+                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile $testFileRemotePath -ConnectionParams $connectionParams -ScriptFileIsRemotePath
 
                    $result | Should Be $testExpectedResult
                 }
 
                 It "should invoke script locally for ScriptBody with arguments" {
-                   $result = Invoke-RemotePowershellMetaRunner -ScriptBody 'param($x) Write-Output $x' -ConnectionParams $connParams -ScriptArguments 'TEST'
+                   $result = Invoke-RemotePowershellMetaRunner -ScriptBody 'param($x) Write-Output $x' -ConnectionParams $connectionParams -ScriptArguments 'TEST'
 
                    $result | Should Be $testExpectedResult
                 }
 
                 It "should invoke script locally for 2 ScriptFiles" {
-                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile @($testFilePath,$testFilePath) -ConnectionParams $connParams
+                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile @($testFilePath,$testFilePath) -ConnectionParams $connectionParams
 
                    $result.Count | Should be 2
                    $result[0] | Should Be $testExpectedResult
@@ -84,7 +84,7 @@ Describe "Invoke-RemotePowershellMetaRunner" {
                 }
 
                 It "should invoke script locally for 2 ScriptFiles with ScriptFileIsRemotePath" {
-                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile @($testFileRemotePath,$testFileRemotePath) -ConnectionParams $connParams -ScriptFileIsRemotePath
+                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile @($testFileRemotePath,$testFileRemotePath) -ConnectionParams $connectionParams -ScriptFileIsRemotePath
 
                    $result.Count | Should be 2
                    $result[0] | Should Be $testExpectedResult
@@ -92,7 +92,7 @@ Describe "Invoke-RemotePowershellMetaRunner" {
                 }
 
                 It "should invoke script locally for ScriptBody" {
-                   $result = Invoke-RemotePowershellMetaRunner -ScriptBody $testScriptBody -ConnectionParams $connParams
+                   $result = Invoke-RemotePowershellMetaRunner -ScriptBody $testScriptBody -ConnectionParams $connectionParams
 
                    $result | Should Be $testExpectedResult
                 }
@@ -102,16 +102,16 @@ Describe "Invoke-RemotePowershellMetaRunner" {
             <#Context "when run locally with user specified" {
 
                 $cred = ConvertTo-PSCredential -User 'CIUser' -Password ''
-                $connParams = New-ConnectionParameters -Credential $cred
+                $connectionParams = New-ConnectionParameters -Credential $cred
 
                 It "should invoke script locally for ScriptFile" {
-                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile $testFilePath -ConnectionParams $connParams
+                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile $testFilePath -ConnectionParams $connectionParams
 
                    $result | Should Be $testExpectedResult
                 }
 
                 It "should invoke script locally for ScriptBlock" {
-                   $result = Invoke-RemotePowershellMetaRunner -ScriptBody $testScriptBody -ConnectionParams $connParams
+                   $result = Invoke-RemotePowershellMetaRunner -ScriptBody $testScriptBody -ConnectionParams $connectionParams
 
                    $result | Should Be $testExpectedResult
                 }
@@ -119,11 +119,9 @@ Describe "Invoke-RemotePowershellMetaRunner" {
 
             Context "when run remotely" {
 
-                $connParams = New-ConnectionParameters -Nodes 'localhost'
-
                 It "should throw exception when ScriptFile does not exist" {
                     try { 
-                        Invoke-RemotePowershellMetaRunner -ScriptFile "${testFilePath}.wrong" -ConnectionParams $connParams
+                        Invoke-RemotePowershellMetaRunner -ScriptFile "${testFilePath}.wrong" -ConnectionParams $connectionParams
                     } catch {
                         return
                     }
@@ -131,19 +129,19 @@ Describe "Invoke-RemotePowershellMetaRunner" {
                 }
 
                 It "should invoke script for ScriptFile" {
-                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile $testFilePath -ConnectionParams $connParams
+                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile $testFilePath -ConnectionParams $connectionParams
 
                    $result | Should Be $testExpectedResult
                 }
 
                 It "should invoke script for ScriptFile with ScriptFileIsRemotePath" {
-                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile $testFileRemotePath -ConnectionParams $connParams -ScriptFileIsRemotePath
+                   $result = Invoke-RemotePowershellMetaRunner -ScriptFile $testFileRemotePath -ConnectionParams $connectionParams -ScriptFileIsRemotePath
 
                    $result | Should Be $testExpectedResult
                 }
 
                 It "should invoke script for ScriptBlock" {
-                   $result = Invoke-RemotePowershellMetaRunner -ScriptBody $testScriptBody -ConnectionParams $connParams
+                   $result = Invoke-RemotePowershellMetaRunner -ScriptBody $testScriptBody -ConnectionParams $connectionParams
 
                    $result | Should Be $testExpectedResult
                 }
@@ -151,11 +149,9 @@ Describe "Invoke-RemotePowershellMetaRunner" {
 
             Context "when a scriptblock with non-zero lastexitcode is invoked" {
 
-                $connParams = New-ConnectionParameters
-
                 It "should fail with error" {
                     try { 
-                        $result = Invoke-RemotePowershellMetaRunner -ScriptBody "cmd /c 'exit 1'" -ConnectionParams $connParams
+                        $result = Invoke-RemotePowershellMetaRunner -ScriptBody "cmd /c 'exit 1'" -ConnectionParams $connectionParams
                     } catch {
                         return
                     }
@@ -165,10 +161,8 @@ Describe "Invoke-RemotePowershellMetaRunner" {
 
             Context "when a scriptblock with non-zero lastexitcode is invoked and FailOnNonZeroExitCode is false" {
 
-                $connParams = New-ConnectionParameters
-
                 It "should not fail" {
-                    $result = Invoke-RemotePowershellMetaRunner -ScriptBody "cmd /c 'exit 1'" -ConnectionParams $connParams -FailOnNonZeroExitCode:$false
+                    $result = Invoke-RemotePowershellMetaRunner -ScriptBody "cmd /c 'exit 1'" -ConnectionParams $connectionParams -FailOnNonZeroExitCode:$false
                 }
             }
 

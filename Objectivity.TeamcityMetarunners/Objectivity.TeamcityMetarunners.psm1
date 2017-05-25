@@ -22,21 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-$curDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$Public  = @(Get-ChildItem -Recurse -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue)
+$Private = @(Get-ChildItem -Recurse -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue)
 
-$baseModuleDir = "$curDir\baseModules"
-
-if (!(Get-Module -Name PSCI) -and !(Get-Module -Name PSCI -ListAvailable)) {
-    "Importing PSCI library from '${baseModuleDir}\PSCI'"
-    Import-Module -Name "${baseModuleDir}\PSCI" -Force -Global
+foreach ($import in @($Public + $Private)) {
+    try {
+        . $import.fullname
+    }
+    catch {
+        Write-Error -Message "Failed to import function $($import.fullname): $_"
+    }
 }
 
-$publicFunctions = @()
-Get-ChildItem -Recurse $curDir -Include *.ps1 | Where-Object { $_ -notmatch '\.Tests.ps1|_deploy'  } | Foreach-Object {
-    . $_.FullName 
-    if ($_.FullName -match '(Utils|JMeter|TestTrend|Zap)\\') {
-        $publicFunctions += ($_.Name -replace '.ps1', '')
-    }     
-}
-
-Export-ModuleMember -Function $publicFunctions
+Export-ModuleMember -Function $Public.Basename
