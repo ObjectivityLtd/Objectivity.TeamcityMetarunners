@@ -46,13 +46,11 @@ Task Test {
     "`n"
 }
 
-Task Build -Depends Init, LicenseChecks, RestorePowershellGallery {
+Task Build -Depends Init, LicenseChecks, Test {
     $lines
     
     # Import-Module to check everything's ok
-    $buildDetails = Get-BuildVariables
-    $projectName = Join-Path ($BuildDetails.ProjectPath) (Get-ProjectName)
-    Import-Module -Name $projectName -Force
+    Import-Module -Name $ENV:BHModulePath -Force
 
     if ($ENV:BHBuildSystem -eq 'Teamcity' -or $ENV:BHBuildSystem -eq 'AppVeyor') {
       "Updating module psd1 - FunctionsToExport"
@@ -65,6 +63,9 @@ Task Build -Depends Init, LicenseChecks, RestorePowershellGallery {
       else {
         "Not updating module psd1 version - no env:PackageVersion set"
       }
+      
+      "Removing .Tests. files"
+      Get-ChildItem -Path $ProjectRoot -Include '*.Tests.*ps*1' -Recurse -File | Remove-Item -Force 
 
     }
 }
@@ -85,16 +86,6 @@ Task StaticCodeAnalysis {
             Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Passed
       }
     }
-}
-
-Task RestorePowershellGallery {
-  "Installing project dependencies"
-  $dependencyPath = "$buildToolsPath\psci.depend.psd1"
-  $dstPath = "$ProjectRoot\baseModules"
-  if (Test-Path -Path $dstPath) { 
-      Remove-Item -Path "$dstPath" -Recurse -Force
-  }
-  Invoke-PSDepend -Path $dependencyPath -Target $dstPath -Force -Verbose
 }
 
 Task LicenseChecks {

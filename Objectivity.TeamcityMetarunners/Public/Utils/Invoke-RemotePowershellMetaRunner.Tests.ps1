@@ -22,10 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-Import-Module -Name "$PSScriptRoot\..\..\..\PSCI.psd1" -Force
+Import-Module -Name "$PSScriptRoot\..\..\Objectivity.TeamcityMetarunners.psd1" -Force
 
-Describe -Tag "PSCI.unit" "Invoke-RemotePowershellMetaRunner" {
-    InModuleScope PSCI.teamcityExtensions {
+Describe "Invoke-RemotePowershellMetaRunner" {
+    InModuleScope Objectivity.TeamcityMetarunners {
 
         Mock Write-Log { 
             if ($Critical) {

@@ -22,10 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-Import-Module -Name "$PSScriptRoot\..\..\..\PSCI.psd1" -Force
+Import-Module -Name "$PSScriptRoot\..\..\Objectivity.TeamcityMetarunners.psd1" -Force
 
-Describe -Tag "PSCI.unit" "Get-TeamcityHashtableParameter" {
-    InModuleScope PSCI.teamcityExtensions {
+Describe "Get-TeamcityHashtableParameter" {
+    InModuleScope Objectivity.TeamcityMetarunners {
         Context "when supplied a string with escaped commas" {
             It "should return one-element hashtable" {
                $result = Get-TeamcityHashtableParameter -Param 'key=value1\,key2=va\\lue2'

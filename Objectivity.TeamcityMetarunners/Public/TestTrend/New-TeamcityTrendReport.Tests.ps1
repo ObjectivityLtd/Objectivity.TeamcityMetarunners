@@ -22,29 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-Import-Module -Name "$PSScriptRoot\..\..\..\PSCI.psd1" -Force
+Import-Module -Name "$PSScriptRoot\..\..\Objectivity.TeamcityMetarunners.psd1" -Force
 
-Describe -Tag "PSCI.unit" "Invoke-ClearDirectoryMetaRunner" {
-    InModuleScope PSCI.teamcityExtensions {
-        
-            Context "when IncludeRegex and ExcludeRegex are specified" {
-                It "directories should be properly filtered" {
+<#Describe "New-TeamcityTrendReport" {
+    InModuleScope Objectivity.TeamcityMetarunners {
 
-                    try { 
-                        Push-Location -Path $env:TEMP
-                        New-Item -Path 'test1\bin' -ItemType Directory -Force
-                        New-Item -Path 'test2\bin' -ItemType Directory -Force
+        $teamcityDbConnectionString = 'Data Source=<anonymized>;Integrated Security=SSPI;Initial Catalog=<anonymized>'
+        $teamcityBuildId = 1
 
-                        Invoke-ClearDirectoryMetaRunner -IncludeRegex 'bin$' -ExcludeRegex 'test2'
+        Context "when invoking with existing buildId" {
+            
+            New-TeamcityTrendReport -TeamcityDbConnectionString $teamcityDbConnectionString -TeamcityBuildId $teamcityBuildId -OutputDir 'C:\TrendTest' -NumberOfLastBuilds 100
 
-                        Test-Path -LiteralPath 'test1\bin' | Should Be $false
-                        Test-Path -LiteralPath 'test2\bin' | Should Be $true
-                    } finally {
-                        Remove-Item -LiteralPath 'test1' -Force -Recurse
-                        Remove-Item -LiteralPath 'test2' -Force -Recurse
-                        Pop-Location
-                    }
-                }
+            It "should work" {
+              
             }
+        }
+
     }
 }
+#>

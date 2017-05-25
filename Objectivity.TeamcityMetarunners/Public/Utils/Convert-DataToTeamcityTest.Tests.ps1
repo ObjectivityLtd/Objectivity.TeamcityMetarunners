@@ -22,10 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-Import-Module -Name "$PSScriptRoot\..\..\..\PSCI.psd1" -Force
+Import-Module -Name "$PSScriptRoot\..\..\Objectivity.TeamcityMetarunners.psd1" -Force
 
-Describe -Tag "PSCI.unit" "Convert-DataToTeamCityTest.Tests.ps1" {
-    InModuleScope PSCI.teamcityExtensions {
+Describe "Convert-DataToTeamCityTest.Tests.ps1" {
+    InModuleScope Objectivity.TeamcityMetarunners {
 
             Context "when provided valid InputData" {
                 $InputData = @(

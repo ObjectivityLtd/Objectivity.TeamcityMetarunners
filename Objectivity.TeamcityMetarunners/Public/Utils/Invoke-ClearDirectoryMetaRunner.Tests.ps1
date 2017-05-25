@@ -22,20 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 #>
 
-Import-Module -Name "$PSScriptRoot\..\..\..\PSCI.psd1" -Force
+Import-Module -Name "$PSScriptRoot\..\..\Objectivity.TeamcityMetarunners.psd1" -Force
 
-<#Describe -Tag "PSCI.integration" "New-JMeterAggregateReport.Tests.ps1" {
-    InModuleScope PSCI.teamcityExtensions {
+Describe "Invoke-ClearDirectoryMetaRunner" {
+    InModuleScope Objectivity.TeamcityMetarunners {
+        
+            Context "when IncludeRegex and ExcludeRegex are specified" {
+                It "directories should be properly filtered" {
 
-        Context "when invoking with existing JTL" {
-            
-            New-JmeterAggregateReport -JMeterDir 'c:\a\apache-jmeter-2.13' -InputJtlFilePath 'c:\a\globalAggregateResult.jtl' -OutputDir 'c:\a\test' -JavaPath 'c:\jdk7_x64\bin\java.exe -Timeout 1000'
+                    try { 
+                        Push-Location -Path $env:TEMP
+                        New-Item -Path 'test1\bin' -ItemType Directory -Force
+                        New-Item -Path 'test2\bin' -ItemType Directory -Force
 
-            It "should work" {
-              
+                        Invoke-ClearDirectoryMetaRunner -IncludeRegex 'bin$' -ExcludeRegex 'test2'
+
+                        Test-Path -LiteralPath 'test1\bin' | Should Be $false
+                        Test-Path -LiteralPath 'test2\bin' | Should Be $true
+                    } finally {
+                        Remove-Item -LiteralPath 'test1' -Force -Recurse
+                        Remove-Item -LiteralPath 'test2' -Force -Recurse
+                        Pop-Location
+                    }
+                }
             }
-        }
-
     }
 }
-#>
