@@ -1,0 +1,52 @@
+skip_commits:
+  files:
+    - README.md
+
+image: Visual Studio 2017
+
+environment:
+  PowershellGalleryApiKey:
+    secure: IpwbqCY/2gU1iKYzF6bPJtILUY789f9fpgt+zP0LRrOK5Y3JXajA5yk/XaRkVjuy
+  GithubAuthToken:
+    secure: PkFAZB6f1lwOR9i3Mn9mR+kQBszikFVxmrhtOGK7p/xKlVF8o/htJc9LSQDSi3bN
+    
+init:
+  # Set "build version number" to "short-commit-hash" or when tagged to "tag name"
+  - ps: >-
+      if ($env:APPVEYOR_REPO_TAG -eq "true")
+      {
+        Update-AppveyorBuild -Version "$env:APPVEYOR_REPO_TAG_NAME"
+        $env:packageVersion = "$env:APPVEYOR_REPO_TAG_NAME" 
+      }
+  - git config --global core.autocrlf true
+  
+build_script:
+  - ps: ./build/build.ps1
+
+test: off
+  
+artifacts:
+  - path: ObjectivityTeamcityMetarunners
+ 
+deploy:
+  - provider: GitHub
+    auth_token: $(GithubAuthToken)
+    artifact: /.*\.zip/
+    draft: true
+    prerelease: false
+    on:
+      branch: master
+      appveyor_repo_tag: true
+#  - provider: NuGet
+#    api_key: $(NugetApiKey)
+#    artifact: PSCI.zip
+#    on:
+#      branch: master
+#      appveyor_repo_tag: true
+
+after_deploy:
+  - ps: Publish-Module -Path (Join-Path -Path $env:APPVEYOR_BUILD_FOLDER -ChildPath "ObjectivityTeamcityMetarunners") -NuGetApiKey $env:PowershellGalleryApiKey -Verbose -Force
+    on:
+      branch: master
+      appveyor_repo_tag: true
+      
