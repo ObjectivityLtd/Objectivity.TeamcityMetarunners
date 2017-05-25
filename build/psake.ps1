@@ -5,7 +5,7 @@ Properties {
 # Common variables
 $ProjectRoot = $ENV:BHModulePath
 if (-not $ProjectRoot) {
-    $ProjectRoot = Join-Path -Path (Split-Path -Parent $PSScriptRoot) -ChildPath 'PSCI'
+    $ProjectRoot = Join-Path -Path (Split-Path -Parent $PSScriptRoot) -ChildPath 'Objectivity.TeamcityMetarunners'
 }
 
 $Timestamp = Get-Date -uformat "%Y%m%d-%H%M%S"
@@ -46,7 +46,7 @@ Task Test {
     "`n"
 }
 
-Task Build -Depends Init, LicenseChecks, RestorePowershellGallery, RestoreNuGetDsc {
+Task Build -Depends Init, LicenseChecks, RestorePowershellGallery {
     $lines
     
     # Import-Module to check everything's ok
@@ -85,22 +85,6 @@ Task StaticCodeAnalysis {
             Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Passed
       }
     }
-}
-
-Task RestoreNuGetDsc {
-    $nugetPath = "$ProjectRoot\externalLibs\nuget\nuget.exe"
-    $dscPath = "$ProjectRoot\dsc\ext\PsGallery"
-
-    & $nugetPath restore `
-        "$dscPath\packages.config" `
-        -ConfigFile "$dscPath\nuget.config" `
-        -OutputDirectory "$dscPath"
-        
-    $dscPath = "$ProjectRoot\dsc\ext\Grani"
-    & $nugetPath restore `
-        "$dscPath\packages.config" `
-        -ConfigFile "$dscPath\nuget.config" `
-        -OutputDirectory "$dscPath"
 }
 
 Task RestorePowershellGallery {
