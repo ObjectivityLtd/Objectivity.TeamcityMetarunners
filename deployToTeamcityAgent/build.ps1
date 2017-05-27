@@ -1,3 +1,5 @@
+param ($buildCounter)
+
 $Global:ErrorActionPreference = 'Stop'
 $Global:VerbosePreference = 'SilentlyContinue'
 
@@ -28,7 +30,8 @@ New-Item -Path "$PSScriptRoot\bin" -ItemType Directory
 Copy-Item -Path @("$PSScriptRoot\deploy.ps1", "$PSScriptRoot\PSCI.boot.ps1") -Destination "$PSScriptRoot\bin"
 Copy-Item -Path @("$PSScriptRoot\configuration") -Destination "$PSScriptRoot\bin\configuration" -Recurse
 
-"Installing dependencies"
 Invoke-PSDepend -Path "$PSScriptRoot\build.depend.psd1" -Target "$PSScriptRoot\bin\packages" -Force -Verbose
-Compress-Archive -Path "$PSScriptRoot\packages\*" -DestinationPath "$PSScriptRoot\bin\package.zip"
+Compress-Archive -Path "$PSScriptRoot\bin\packages\*" -DestinationPath "$PSScriptRoot\bin\package.zip"
+$teamcityMetarunnersVersion = Get-ChildItem -Path "$PSScriptRoot\bin\packages\Objectivity.TeamcityMetarunners" -Directory | Select-Object -ExpandProperty Name
+Write-Host "##teamcity[buildNumber '$teamcityMetarunnersVersion-#$buildCounter']"
 Remove-Item -Path "$PSScriptRoot\bin\packages\Objectivity.TeamcityMetarunners" -Force -Recurse
