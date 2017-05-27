@@ -47,3 +47,5 @@ if (!(Test-Path -LiteralPath $psciPath )) {
 }
 
 Import-Module -Name "$teamcityRunnersPath\Objectivity.TeamcityMetarunners.psd1"
+
+[Environment]::SetEnvironmentVariable('PSCI_PATH', $psciPath, 'Machine')
