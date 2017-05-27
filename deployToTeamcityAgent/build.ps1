@@ -22,9 +22,13 @@ else {
     "Using PSDepend $($psDepend.Version)"
 }
 
-"Installing dependencies"
-Remove-Item -Path "$PSScriptRoot\packages" -Force -Recurse
-Invoke-PSDepend -Path "$PSScriptRoot\build.depend.psd1" -Target "$PSScriptRoot\packages" -Force -Verbose
-
 "Creating package"
-Compress-Archive -Path "$PSScriptRoot\packages\*" -DestinationPath "$PSScriptRoot\packages\package.zip"
+Remove-Item -Path "$PSScriptRoot\bin" -Force -Recurse -ErrorAction SilentlyContinue
+New-Item -Path "$PSScriptRoot\bin" -ItemType Directory
+Copy-Item -Path @("$PSScriptRoot\deploy.ps1", "$PSScriptRoot\PSCI.boot.ps1") -Destination "$PSScriptRoot\bin"
+Copy-Item -Path @("$PSScriptRoot\configuration") -Destination "$PSScriptRoot\bin\configuration" -Recurse
+
+"Installing dependencies"
+Invoke-PSDepend -Path "$PSScriptRoot\build.depend.psd1" -Target "$PSScriptRoot\bin\packages" -Force -Verbose
+Compress-Archive -Path "$PSScriptRoot\packages\*" -DestinationPath "$PSScriptRoot\bin\package.zip"
+Remove-Item -Path "$PSScriptRoot\bin\packages\Objectivity.TeamcityMetarunners" -Force -Recurse

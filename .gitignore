@@ -1,6 +1,6 @@
 /deployToTeamcityAgent/configuration/tokensSensitive.ps1
 /deployToTeamcityAgent/deploy.log.txt
-/deployToTeamcityAgent/packages
+/deployToTeamcityAgent/bin
 /Objectivity.TeamcityMetarunners/TestTrend/New-TeamcityTrendReport.Tests.ps1
 /Objectivity.TeamcityMetarunners/baseModules/
 /build/test.xml
