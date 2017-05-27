@@ -153,3 +153,4 @@ try {
     Write-ErrorRecord -ErrorRecord $_
 } finally {
     Pop-Location
+}
