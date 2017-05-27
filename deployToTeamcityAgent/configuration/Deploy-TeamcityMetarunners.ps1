@@ -68,7 +68,7 @@ function Deploy-TeamcityMetarunners {
         $ConnectionParams
     )
     
-    $sourcePath = Join-Path -Path ((Get-ConfigurationPaths).ProjectRootPath) -ChildPath "packages\package.zip"
+    $sourcePath = Join-Path -Path ((Get-ConfigurationPaths).ProjectRootPath) -ChildPath "package.zip"
 
     $params = @{
         Path = $sourcePath
