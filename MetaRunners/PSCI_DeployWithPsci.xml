@@ -23,20 +23,31 @@
           <param name="jetbrains_powershell_bitness" value="x64" />
           <param name="jetbrains_powershell_execution" value="PS1" />
           <param name="jetbrains_powershell_script_code"><![CDATA[$global:ErrorActionPreference = "Stop"
-$psciAgentPath = [Environment]::GetEnvironmentVariable('PSCI_PATH', 'Machine')
-if (!$psciAgentPath ) {
-  Write-Host "No PSCI_PATH environment variable. Please ensure PSCI is installed on agent."
-  exit 1
-}
+
 if (!(Test-Path -Path '%psci.deploy.deployps1%')) {
   Write-Host "Cannot find file '%psci.deploy.deployps1%' in directory '$((Get-Location).Path)'"
   exit 1
 }
+
 try { 
-. "$psciAgentPath\PSCI.classes.ps1"
-. "$psciAgentPath\core\utils\Write-Log.ps1"
-. "$psciAgentPath\modules\teamcityExtensions\Utils\Get-TeamcityArrayParameter.ps1"
-. "$psciAgentPath\modules\teamcityExtensions\Utils\Get-TeamcityHashtableParameter.ps1"
+$teamcityMetarunnersPath = [Environment]::GetEnvironmentVariable('ObjectivityTeamcityMetarunners_PATH', 'Machine')
+if ($teamcityMetarunnersPath)   {
+  # PSCI 1.1.x
+  $modulePath = Get-ChildItem -Path "$teamcityMetarunnersPath\Objectivity.TeamcityMetarunners" -Directory | Select-Object -ExpandProperty FullName
+  . "$modulePath\Public\Utils\Get-TeamcityArrayParameter.ps1"
+  . "$modulePath\Public\Utils\Get-TeamcityHashtableParameter.ps1"
+} else {
+  # PSCI 1.0.x
+  $psciAgentPath = [Environment]::GetEnvironmentVariable('PSCI_PATH', 'Machine')
+  if (!$psciAgentPath ) {
+    Write-Host "No ObjectivityTeamcityMetarunners_PATH / PSCI_PATH environment variables. Please ensure Objectivity.TeamcityMetarunners / PSCI is installed on agent."
+    exit 1
+  }
+  . "$psciAgentPath\PSCI.classes.ps1"
+  . "$psciAgentPath\core\utils\Write-Log.ps1"
+  . "$psciAgentPath\modules\teamcityExtensions\Utils\Get-TeamcityArrayParameter.ps1"
+  . "$psciAgentPath\modules\teamcityExtensions\Utils\Get-TeamcityHashtableParameter.ps1"
+}
 
 $env = Get-TeamcityArrayParameter -Param @'
 %psci.deploy.environment%

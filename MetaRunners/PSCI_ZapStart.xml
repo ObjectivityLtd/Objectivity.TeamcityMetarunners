@@ -14,7 +14,6 @@
         <parameters>
           <param name="jetbrains_powershell_bitness" value="x86" />
           <param name="jetbrains_powershell_execution" value="PS1" />
-          <param name="jetbrains_powershell_minVersion" value="4.0" />
           <param name="jetbrains_powershell_script_code">
               <![CDATA[if ('%zap.enabled%' -and '%zap.enabled%' -ine 'true') {
   Write-Host "zap.enabled is set to %zap.enabled% - skipping."

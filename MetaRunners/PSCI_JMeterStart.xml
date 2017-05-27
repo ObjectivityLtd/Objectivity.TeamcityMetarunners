@@ -18,7 +18,6 @@
         <parameters>
           <param name="jetbrains_powershell_bitness" value="x86" />
           <param name="jetbrains_powershell_execution" value="PS1" />
-          <param name="jetbrains_powershell_minVersion" value="4.0" />
           <param name="jetbrains_powershell_script_code"><![CDATA[if ('%jmeter.enabled%' -and '%jmeter.enabled%' -ine 'true') {
   Write-Host "jmeter.enabled is set to %jmeter.enabled% - skipping."
   exit 0
