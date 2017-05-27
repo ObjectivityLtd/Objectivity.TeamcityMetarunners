@@ -88,4 +88,17 @@ function Deploy-TeamcityMetarunners {
     }
 
     Copy-FilesToRemoteServer @params
+    
+    $blueGreenEnv = $Tokens.Psci.BlueGreenEnvVariableName
+    $session = New-PsSession ($ConnectionParams.PSSessionParams)
+    Write-Log -Info "Setting PSCI_PATH environment variable"
+    Invoke-Command -Session $session -ScriptBlock { 
+      $modulePath = [Environment]::GetEnvironmentVariable($using:blueGreenEnv, 'Machine')
+      $psciPath = Get-ChildItem -Path "$modulePath\PSCI" -Directory | Select-Object -ExpandProperty FullName
+      [Environment]::SetEnvironmentVariable('PSCI_PATH', $psciPath, 'Machine')
+      Write-Host "PSCI_PATH set to '$psciPath'"
+    }
+    
+    Remove-PSSession -Session $session
+
 }

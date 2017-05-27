@@ -94,7 +94,7 @@ param(
     
     [Parameter(Mandatory=$false)]
     [string[]]
-    $ServerRolesFilter = 'Psci',
+    $ServerRolesFilter = 'TeamcityMetarunners',
     
     [Parameter(Mandatory=$false)]
     [string[]]
