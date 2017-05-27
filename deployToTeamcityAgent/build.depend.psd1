@@ -1,0 +1,3 @@
+@{
+  'Objectivity.TeamcityMetarunners' = 'latest'
+}

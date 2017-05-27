@@ -29,16 +29,21 @@ if (!$modulePath) {
   $modulePath = [Environment]::GetEnvironmentVariable('ObjectivityTeamcityMetarunners_PATH', 'Machine')
 }
 if (!$modulePath) {
-  $modulePath = Get-ChildItem -Path "$PSScriptRoot\.." -Exclude 'Boot' | Select -First 1 -ExpandProperty FullName
-  if (!$modulePath) { 
-      Write-Host -Object "No ObjectivityTeamcityMetaRunners_PATH environment variable and module was not found at '$PSScriptRoot\..'. Please ensure Objectivity.TeamcityMetarunners is installed on $([system.environment]::MachineName)."
-      exit 1
-  } 
+   Write-Host -Object "No ObjectivityTeamcityMetaRunners_PATH environment variable. Please ensure Objectivity.TeamcityMetarunners is installed on $([system.environment]::MachineName)."
+   exit 1
 }
-$modulePath = Join-Path -Path $modulePath -ChildPath 'Objectivity.TeamcityMetarunners.psd1'
-if (!(Test-Path -LiteralPath $modulePath )) {
-  Write-Host "Cannot find '$modulePath'. Please ensure Objectivity.TeamcityMetarunners is installed on $([system.environment]::MachineName)."
+$psciPath = Get-ChildItem -Path "$modulePath\PSCI" -Directory | Select-Object -ExpandProperty FullName
+if (!(Test-Path -LiteralPath $psciPath )) {
+  Write-Host "Cannot find '$psciPath'. Please ensure Objectivity.TeamcityMetarunners is installed on $([system.environment]::MachineName)."
   exit 1
 }
 
-Import-Module -Name $modulePath 
+Import-Module -Name "$psciPath\PSCI.psd1"
+
+$teamcityRunnersPath = Get-ChildItem -Path "$modulePath\Objectivity.TeamcityMetarunners" -Directory | Select-Object -ExpandProperty FullName
+if (!(Test-Path -LiteralPath $psciPath )) {
+  Write-Host "Cannot find '$teamcityRunnersPath'. Please ensure Objectivity.TeamcityMetarunners is installed on $([system.environment]::MachineName)."
+  exit 1
+}
+
+Import-Module -Name "$teamcityRunnersPath\Objectivity.TeamcityMetarunners.psd1"

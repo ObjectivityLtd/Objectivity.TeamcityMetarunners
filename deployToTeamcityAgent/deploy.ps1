@@ -115,13 +115,13 @@ $global:ErrorActionPreference = "Stop"
 try {
     ############# Initialization
     Push-Location -Path $PSScriptRoot
-
+    
     if (!$PSCILibraryPath) {
-      if (!(Get-Module -Name PSCI) -and !(Get-Module -Name PSCI -ListAvailable)) {
-        Write-Output -InputObject "PSCI library has not been installed. Please install it from Powershell Gallery, or alternatively install it manually and set `$PSCILibraryPath parameter."
+      $PSCILibraryPath = Get-ChildItem -Path "packages\PSCI" -Directory | Select-Object -ExpandProperty FullName
+      if (!$PSCILibraryPath) {
+        Write-Output -InputObject "Cannot find PSCI library at '$PSScriptRoot\packages\PSCI', please run build."
         exit 1
       }
-      Import-Module PSCI
     }
     else {
       if (![System.IO.Path]::IsPathRooted($PSCILibraryPath)) {
@@ -131,8 +131,8 @@ try {
           Write-Output -InputObject "Cannot find PSCI library at '$PSCILibraryPath'. Please ensure your ProjectRootPath and PSCILibraryPath parameters are correct."
           exit 1
       }
-      Import-Module "$PSCILibraryPath\PSCI.psd1" -Force
     }
+    Import-Module "$PSCILibraryPath\PSCI.psd1" -Force
     
     $PSCIGlobalConfiguration.LogFile = "$PSScriptRoot\deploy.log.txt"
     Remove-Item -LiteralPath $PSCIGlobalConfiguration.LogFile -ErrorAction SilentlyContinue
@@ -153,4 +153,3 @@ try {
     Write-ErrorRecord -ErrorRecord $_
 } finally {
     Pop-Location
-}

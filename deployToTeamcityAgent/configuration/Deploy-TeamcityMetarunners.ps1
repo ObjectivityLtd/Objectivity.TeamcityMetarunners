@@ -67,12 +67,8 @@ function Deploy-TeamcityMetarunners {
         [object]
         $ConnectionParams
     )
-
-    if ($Tokens.Psci.PsciPackage) {
-        $sourcePath = $Tokens.Psci.PsciPackage
-    } else {
-        $sourcePath = (Get-ConfigurationPaths).PsciLibraryPath
-    }
+    
+    $sourcePath = Join-Path -Path ((Get-ConfigurationPaths).ProjectRootPath) -ChildPath "packages\package.zip"
 
     $params = @{
         Path = $sourcePath
