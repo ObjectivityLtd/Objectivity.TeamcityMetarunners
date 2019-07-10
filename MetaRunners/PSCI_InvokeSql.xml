@@ -10,7 +10,7 @@
       <param name="sqlRun.password" value="" spec="password description='Password - leave empty for agent service credentials' label='Password' display='normal'" />
       <param name="sqlRun.query" value="" spec="text description='SQL query to run' validationMode='any' label='SQL query' display='normal'" />
       <param name="sqlRun.file" value="" spec="text description='Filename containing SQL query to run' validationMode='any' label='SQL file to run' display='normal'" />
-      <param name="sqlRun.timeout" value="" spec="text description='Query timeout in seconds (default 120)' validationMode='any' label='Query timeout' display='normal'" />
+      <param name="sqlRun.timeout" value="" spec="text description='Query timeout in seconds (if a timeout value is not specified, the queries do not time out)' validationMode='any' label='Query timeout' display='normal'" />
     </parameters>
     <build-runners>
       <runner name="Run SQL" type="jetbrains_powershell">
