@@ -10,7 +10,7 @@
       <param name="sqlServer.username" value="" spec="text description='Username' validationMode='any' label='Username' display='normal'" />
       <param name="sqlServer.password" value="zxx775d03cbe80d301b" spec="password description='Password' label='Password' display='normal'" />
       <param name="sqlServer.backup.location" value="" spec="text description='Path to database backup. Only used if action is Drop and Restore.' validationMode='any' label='Backup location' display='normal'" />
-      <param name="sqlServer.timeout" value="" spec="text description='Query timeout in seconds (default 120)' validationMode='any' label='Query timeout' display='normal'" />
+      <param name="sqlServer.timeout" value="" spec="text description='Query timeout in seconds (use 0 for infinite timeout)' validationMode='any' label='Query timeout' display='normal'" />
     </parameters>
     <build-runners>
       <runner name="Run Invoke-DatabaseMetaRunner" type="jetbrains_powershell">
