@@ -179,19 +179,19 @@ function New-TeamcityTrendReport {
 
     $htmlChart = ConvertTo-EnhancedHTMLFragmentRickshawChart -JavascriptDataVariableName 'TestData' -JavascriptTestTimeThresholdDataVariableName 'TestTimeThresholdData'
 
-    $javascriptUri= @('http://code.jquery.com/jquery-1.11.3.min.js', 'http://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js',
-        'http://cdn.datatables.net/fixedcolumns/3.1.0/js/dataTables.fixedColumns.min.js',
-        'http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js', 
-        'http://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.5.1/rickshaw.min.js')
+    $javascriptUri= @('https://code.jquery.com/jquery-1.11.3.min.js', 'https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js',
+        'https://cdn.datatables.net/fixedcolumns/3.1.0/js/dataTables.fixedColumns.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js', 
+        'https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.5.1/rickshaw.min.js')
 
     Write-Log -Info "Generating Test Trend HTML report at '$htmlOutputPath'."
 
     $params = @{'HTMLFragments' = @($htmlChartData, $htmlTestTimeThresholdData, $htmlChart);
                 'JavascriptUri' = $javascriptUri;
                 'CssStyleSheet' = @((Get-DefaultJqueryDataTableCss), (Get-DefaultRickshawCss));
-                'CssUri' = @('http://cdn.datatables.net/1.10.9/css/jquery.dataTables.css', 
+                'CssUri' = @('https://cdn.datatables.net/1.10.9/css/jquery.dataTables.css', 
                     'https://cdn.datatables.net/fixedcolumns/3.1.0/css/fixedColumns.dataTables.min.css',
-                    'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.min.css')
+                    'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.min.css')
                }
 
     ConvertTo-EnhancedHTML @params | Out-File -FilePath $htmlOutputPath -Encoding UTF8

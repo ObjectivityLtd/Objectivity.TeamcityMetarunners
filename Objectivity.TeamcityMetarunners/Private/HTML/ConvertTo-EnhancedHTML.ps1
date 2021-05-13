@@ -104,9 +104,9 @@ See New-TeamcityTrendReport or New-JMeterAggregateReport
     [CmdletBinding()]
     [OutputType([string])]
     param(
-        [string[]]$JavascriptUri = @('http://code.jquery.com/jquery-1.10.2.min.js', 'http://cdn.datatables.net/1.10.0/js/jquery.dataTables.js'),
+        [string[]]$JavascriptUri = @('https://code.jquery.com/jquery-1.10.2.min.js', 'https://cdn.datatables.net/1.10.0/js/jquery.dataTables.js'),
         [string[]]$CssStyleSheet,
-        [string[]]$CssUri = @('http://cdn.datatables.net/1.10.0/css/jquery.dataTables.css'),
+        [string[]]$CssUri = @('https://cdn.datatables.net/1.10.0/css/jquery.dataTables.css'),
         [string]$Title = 'Report',
         [string]$PreContent,
         [string]$PostContent,
