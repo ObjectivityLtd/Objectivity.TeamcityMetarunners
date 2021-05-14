@@ -116,6 +116,10 @@ function New-TeamcityTrendReport {
         $NumberOfLastBuilds = 30,
 
         [Parameter(Mandatory=$false)]
+        [string]
+        $IncludeBuilds,
+
+        [Parameter(Mandatory=$false)]
         [switch]
         $GenerateCsvFile
     )
@@ -129,8 +133,16 @@ function New-TeamcityTrendReport {
     $csvOutputPath = Join-Path -Path $OutputDir -ChildPath $OutputCsvName
     $htmlOutputPath = Join-Path -Path $OutputDir -ChildPath $OutputHtmlName
 
+    $extraBuildIds = '-1'
+    if ($IncludeBuilds) {
+        if ($IncludeBuilds -notmatch '^\d+(\s*(,|;)\s*\d+)*\s*$') {
+            Write-error "Value '$IncludeBuilds' for parameter IncludeBuilds is not valid. Enter a comma delimited numbers"
+        }
+        $extraBuildIds = $IncludeBuilds.Replace(';', ',')
+    }
+
     $sql = Get-TeamCityTrendReportSql
-    $sql = $sql -f $TeamcityBuildId, $NumberOfLastBuilds
+    $sql = $sql -f $TeamcityBuildId, $NumberOfLastBuilds, $extraBuildIds
 
     Write-Log -Info "Getting trend data from TeamCity database, BuildId: '$TeamcityBuildId', NumberOfLastBuilds: $NumberOfLastBuilds"
     $sqlResult = Invoke-Sql -ConnectionString $TeamcityDbConnectionString -Query $sql
@@ -275,7 +287,7 @@ function Get-TeamCityTrendReportSql {
     if object_id('tempdb..#tests') is not null
         drop table #tests;
 
-    select top {1}
+    select
         build_id,
         build_number,
         cast(row_number() over (partition by build_number order by build_number) as varchar) as build_row,
@@ -292,8 +304,10 @@ function Get-TeamCityTrendReportSql {
             dbo.running r
         where 
             build_id = {0}
-        union all
-        select
+
+        union
+
+        select top {1}
             h.build_id, 
             h.build_number,
             cast(case when h.status = 1 then 1 else 0 end as bit) as success
@@ -317,6 +331,18 @@ function Get-TeamCityTrendReportSql {
         on currentBuild.build_type_id = h.build_type_id
         where
             h.status <> 0 -- cancelled
+        order by build_id desc
+
+        union
+
+        select
+            h.build_id, 
+            h.build_number,
+            cast(case when h.status = 1 then 1 else 0 end as bit) as success
+        from
+            dbo.history h
+        where
+            h.build_id in ({2})
     ) x
     where 
         exists (select 1 from dbo.test_info where build_id = x.build_id)

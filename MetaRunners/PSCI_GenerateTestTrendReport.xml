@@ -7,6 +7,7 @@
       <param name="trendReport.testName.includeRegex" value="" spec="text validationMode='any' label='Include regex' description='Filtering regex - only test names matching this regex will be included' display='normal'" />
       <param name="trendReport.testName.excludeRegex" value="" spec="text validationMode='any' label='Exclude regex' description='Filtering regex - test names matching this regex will be excluded' display='normal'" />
       <param name="trendReport.numberOfLastBuilds" value="30" spec="text validationMode='not_empty' label='Number of last builds' description='Number of builds that will be trended - all earlier builds will be ignored' display='normal'" />
+      <param name="trendReport.includeBuilds" value="" spec="text validationMode='any' label='Builds to include' description='Comma separated list of build ids to include in the report. This parameter allows to compare on benchmark builds' display='normal'" />
       <param name="trendReport.generateCsv" value="$false" spec="checkbox checkedValue='$true' description='If checked, CSV file will be generated' uncheckedValue='$false' label='Generate output CSV' display='normal'" />
       <param name="trendReport.inputThresholdCsv" value="" spec="text display='normal' description='Path to the CSV with test thresholds - columns TestName,PassedTime,FailedTime. Tests with time &lt;= PassedTime will be marked green, Passed Time &lt; time &lt; FailedTime amber, and time &gt;= FailedTime red.' label='Input threshold CSV'" />
       <param name="trendReport.outputFilePrefix" value="" spec="select display='normal' description='TeamCity tab where the results will be presented' label='Output tab' label_1='Test Trend' data_1='' label_3='Test Trend 2' data_3='2' label_5='Test Trend 3' data_5='3' " />
@@ -62,6 +63,7 @@ $params = @{
     TestNameIncludeRegex = $includeRegex
     TestNameExcludeRegex = $excludeRegex
     NumberOfLastBuilds = %trendReport.numberOfLastBuilds%
+    IncludeBuilds = %trendReport.includeBuilds%
     GenerateCsvFile = %trendReport.generateCsv%
 }
 
